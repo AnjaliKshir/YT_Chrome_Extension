@@ -5,13 +5,32 @@
 
 
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
-        const {type, videoId} = obj
+        const {type, videoId, value} = obj
         console.log("Received message: ", obj)
         
         if(type === "NEW")
         {
             currentVideo = videoId
             newVideoLoaded()
+            response({ status: "received" })
+        }
+        else if(type === "PLAY")
+        { 
+            ytPlayer.currentTime = value
+            response({ status: "received" })
+        }
+        else if(type === "DELETE")
+        {
+            currentVideoBookmarks = currentVideoBookmarks.filter((b) => b.time != value)
+            chrome.storage.sync.set({ [currentVideo]: JSON.stringify(currentVideoBookmarks)})
+
+            response(currentVideoBookmarks)
+            // response({ status: "received" })
+
+        }
+        else
+        {
+            response({ status: "not received" })
         }
     })
 
@@ -28,7 +47,7 @@
         var date = new Date(0)
         date.setSeconds(time)
     
-        return date.toISOString().substring(11, 8)
+        return date.toISOString().substring(11, 19)
     }
 
     const addNewBookmarkEventHandler = async() => {
@@ -82,4 +101,10 @@
 
     newVideoLoaded()
 })()
+
+
+
+
+
+
 

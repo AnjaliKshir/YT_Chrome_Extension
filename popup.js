@@ -4,6 +4,9 @@ import { getCurrentTab } from "./utils.js"
 const addNewBookmark = (bookmarkElement, bookmark) => {
     const bookmarkTitleElement = document.createElement("div")
     const newBookmarkElement = document.createElement("div")
+    const controlsElement = document.createElement("div") 
+
+    controlsElement.className = "bookmark_controls" 
 
     bookmarkTitleElement.textContent = bookmark.description
     bookmarkTitleElement.className = "bookmark_title"
@@ -12,7 +15,12 @@ const addNewBookmark = (bookmarkElement, bookmark) => {
     newBookmarkElement.className = "bookmark"
     newBookmarkElement.setAttribute("timestamp", bookmark.time)
 
+    setBookmarkAttribute("play", onPlay, controlsElement)
+    setBookmarkAttribute("delete", onDelete, controlsElement)
+
+
     newBookmarkElement.appendChild(bookmarkTitleElement)
+    newBookmarkElement.appendChild(controlsElement)
     bookmarkElement.appendChild(newBookmarkElement)
 
 
@@ -35,8 +43,38 @@ const viewBookmarks = (currentBookmark = []) =>{
     }
 }
 
+const onPlay = async (e) => {
+    const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp")
+    const activeTab = await getCurrentTab()
+
+    chrome.tabs.sendMessage(activeTab.id, {
+        type: "PLAY",
+        value: bookmarkTime,
+
+    })
+}
+
+const onDelete = async (e) => {
+    const activeTab = await getCurrentTab()
+    const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp")
+    const bookmarkElementToDelete = document.getElementById("bookmark_" + bookmarkTime)
+
+    bookmarkElementToDelete.parentNode.removeChild(bookmarkElementToDelete)
+
+    chrome.tabs.sendMessage(activeTab.id, {
+        type: "DELETE",
+        value: bookmarkTime,
+    }, viewBookmarks)
+}
 
 
+const setBookmarkAttribute = (src, eventListener, controlParentElement) => {
+    const controlElement = document.createElement("img")
+    controlElement.src = "assets/" + src + ".png"
+    controlElement.title = src 
+    controlElement.addEventListener("click", eventListener) 
+    controlParentElement.appendChild(controlElement) 
+} 
 
 
 document.addEventListener("DOMContentLoaded", async() => {
@@ -59,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     else 
     {
         const container = document.getElementsByClassName("container")[0]
-        container.innerHTML = `<div class="title">This is not a YT video page!</div>`
+        container.innerHTML = `<div class="title">Oopsie! Not a YT video page🐝</div>`
     }
 
     }

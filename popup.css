@@ -1,0 +1,76 @@
+body
+{
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    /* background-color: #646abb; */
+    background-color: #ffd500;
+}
+
+.container {
+    width: 280px;
+    /* color: #314d3e; */
+    border-radius: 0.8rem;
+    /* background-color: #66afe9; */
+    /* background-color: #7469B6; */
+}
+
+.inside-container
+{
+    padding: 3px;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 8px;
+    color: #493628;
+}
+
+.textbox {
+    width: 100%;
+    font-size: 12px;
+    margin: 0;
+    padding: 0px 2px;
+}
+
+.textbox:focus {
+    outline: 0;
+    border-color: #66afe9;
+}
+
+.bookmarks {
+    margin: 5px 5px;
+    padding: 3px;
+    /* background-color: red; */
+}
+
+.bookmark {
+    display: flex;
+    color: #6c3f26;
+    /* background-color: #d6a33e; */
+    background-color: #f7efe596;
+    box-shadow: 0 0 6px #32251b;
+    border-radius: 0.8rem;
+    padding: 3px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+}
+
+.bookmark_title {
+    padding: 4px;
+    font-size: 0.8rem;
+}
+
+.bookmark_controls img {
+    margin: 0 4px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    padding: 4px;
+
+}
+
+.bookmark_controls {
+    flex: auto;
+    text-align: right;
+}
